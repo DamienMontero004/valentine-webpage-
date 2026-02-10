@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine ❤️</title>
+
+  <!-- Readable romantic fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff4d6d, #ffb3c6);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 12px;
+    }
+
+    .page {
+      display: none;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 40px 24px;
+      max-width: 100%;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .page.active { display: block; }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+      word-wrap: break-word;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      word-wrap: break-word;
+    }
+
+    .heart {
+      font-size: 3rem;
+      animation: pulse 1.4s infinite;
+      margin-bottom: 14px;
+    }
+
+    input {
+      width: 90%;
+      max-width: 100%;
+      padding: 12px 14px;
+      border-radius: 28px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      margin: 12px 0 20px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #fff;
+      color: #ff4d6d;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    button:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .error {
+      display: none;
+      background: rgba(0,0,0,0.4);
+      padding: 12px 16px;
+      border-radius: 16px;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    ul {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    li {
+      list-style: none;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.15);
+      padding: 12px 14px;
+      border-radius: 16px;
+      flex-wrap: wrap;
+    }
+
+    li input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+    }
+
+    .unlock {
+      display: none;
+      margin-top: 18px;
+      font-weight: 600;
+      font-size: 1rem;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .letter {
+      display: none;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.25);
+      padding: 20px;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-family: 'Dancing Script', cursive;
+      animation: fadeIn 0.8s ease;
+      word-wrap: break-word;
+    }
+
+    audio { display: none; }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      50% { transform: translateX(6px); }
+      75% { transform: translateX(-6px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      p { font-size: 1rem; }
+      input { font-size: 0.95rem; }
+      button { font-size: 0.95rem; padding: 10px 20px; }
+      .heart { font-size: 2.6rem; }
+      li { font-size: 1rem; padding: 10px 12px; gap: 8px; }
+      .letter { font-size: 1.05rem; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic">
+    <source src="Iran.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <!-- Pages same as before... -->
+  <div class="page active" id="page1">
+    <div class="heart">❤️</div>
+    <h1>Before I Ask…</h1>
+    <p>Tell me your name 😌</p>
+    <input id="nameInput" placeholder="Your name" />
+    <button onclick="saveName()">Continue 💕</button>
+  </div>
+
+  <div class="page" id="page2">
+    <div class="heart">❤️</div>
+    <h1 id="proposalTitle">Will You Be My Valentine?</h1>
+    <p>Think carefully… but there’s only one correct answer 😌</p>
+    <button onclick="nextPage(3)">Yes 💖</button>
+    <button onclick="fakeNo(this)">No 🙃</button>
+    <div class="error" id="noError">Error 404: Saying no not found 😏</div>
+  </div>
+
+  <div class="page" id="page3">
+    <div class="heart">😏</div>
+    <h1>I Knew It.</h1>
+    <p id="teaseText">I mean… look at us already 😌❤️</p>
+    <button onclick="nextPage(4)">What’s Next? 👀</button>
+  </div>
+
+  <div class="page" id="page4">
+    <div class="heart">💘</div>
+    <h1>Valentine’s To‑Do List</h1>
+    <p>Official plans (non‑negotiable 😌)</p>
+    <ul>
+      <li><input type="checkbox" onchange="checkAll()" /> 💬 Talk all day</li>
+      <li><input type="checkbox" onchange="checkAll()" /> 🍿 Watch a movie</li>
+      <li><input type="checkbox" onchange="checkAll()" /> 😂 Laugh at nothing</li>
+      <li><input type="checkbox" onchange="checkAll()" /> 💖 Be cute on purpose</li>
+      <li><input type="checkbox" onchange="checkAll()" /> ✨ Make memories</li>
+    </ul>
+    <div class="unlock" id="unlock">🎉 Checklist complete — unlimited cuddles unlocked 😌</div>
+    <button onclick="showLetter()">Read Your Letter 💌</button>
+    <div class="letter" id="letter">
+      <p id="letterText"></p>
+      <p>Happy Valentine’s Day ❤️</p>
+    </div>
+  </div>
+
+  <script>
+    let herName = "";
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const music = document.getElementById('bgMusic');
+        music.volume = 0.6;
+        music.play().catch(() => {});
+      }, 3000);
+    });
+
+    function saveName() {
+      const input = document.getElementById('nameInput');
+      herName = input.value.trim() || 'My Valentine';
+      document.getElementById('proposalTitle').innerText = `Will You Be My Valentine, ${herName}?`;
+      document.getElementById('teaseText').innerText = `${herName}, you choosing yes was never in doubt 😌❤️`;
+      document.getElementById('letterText').innerText = `Dear ${herName},\n\nI don’t know where this goes, but I know I want you there with me. This page is simple, but the feeling is real. Thank you for choosing me — even when you had no choice 😏💘`;
+      nextPage(2);
+    }
+
+    function nextPage(n) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + n).classList.add('active');
+    }
+
+    function fakeNo(btn) {
+      const page = document.getElementById('page2');
+      page.style.animation = 'shake 0.4s';
+      document.getElementById('noError').style.display = 'block';
+      setTimeout(() => { page.style.animation = ''; }, 400);
+      btn.style.position = 'absolute';
+      btn.style.top = Math.random() * 80 + '%';
+      btn.style.left = Math.random() * 80 + '%';
+    }
+
+    function checkAll() {
+      const checks = document.querySelectorAll('input[type=checkbox]');
+      const allChecked = [...checks].every(c => c.checked);
+      if (allChecked) document.getElementById('unlock').style.display = 'block';
+    }
+
+    function showLetter() {
+      document.getElementById('letter').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html
